@@ -1,0 +1,47 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.egg-info/
+dist/
+build/
+
+# Virtual environment
+venv/
+.venv/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+.cursor/
+
+# Claude
+.claude/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Jupyter checkpoints
+.ipynb_checkpoints/
+
+# Large/unnecessary files
+*.zip
+
+# Old/reference files (not part of pipeline)
+march_madness_2019_prediction.ipynb
+march_madness_2026_final copy.ipynb
+march_madness_eda.ipynb
+mm_v2.ipynb
+mm_test_2019_optimized.csv
+mm_train_optimized.csv
+submission_2019_initial.csv
+vilnius-ncaa.ipynb
+presentation.md
+goto-conversion-winning-solution.ipynb
+goto_conversion_source.py
+goto_probs_2024.csv
+goto_probs_2025.csv
+spreads_2019.csv

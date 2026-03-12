@@ -1,0 +1,116 @@
+# March Madness 2026 — NCAA Tournament Prediction
+
+Log-loss optimized prediction pipeline for the Fordham University NCAA March Madness 2026 competition.
+
+## Approach
+
+**3-Model Ensemble** validated with Leave-One-Season-Out (LOSO) cross-validation across 2003–2025 tournaments:
+
+| Model | Method | Role |
+|-------|--------|------|
+| XGBoost Regression | Point differential → spline calibration → probability | Captures margin dynamics |
+| Logistic Regression | Direct probability output (L2, C=1.0) | Stable, well-calibrated baseline |
+| XGBoost Classification | Binary log-loss objective → Platt scaling | Direct probability optimization |
+
+**Market Signal**: Championship futures odds (111 teams from VegasInsider) → Shin conversion (vig removal) → Log5 (head-to-head conversion) → 15% blend with model ensemble. Same approach as the Kaggle 1st place winner ([goto_conversion](https://www.kaggle.com/code/gotoconversion/march-machine-learning-mania-2024)).
+
+### Features (~41 per matchup)
+
+- **Seeds** (3): Seed values and differential
+- **Box Score Averages** (16): Points, FGA, rebounds, blocks, fouls, opponent stats
+- **Elo Ratings** (3): Per-season Elo (K=100, width=400)
+- **GLM Team Quality** (3): OLS regression coefficients as strength indicators
+- **Massey Ordinals** (4): Median rank across 58 ranking systems + POM
+- **Barttorvik Metrics** (6): AdjOE, AdjDE, Barthag, AdjTempo (KenPom-equivalent)
+- **Recent Form** (2): Last 14-day point differential
+- **Win Ratios** (2): Overall and away win percentage differentials
+- **Market Probabilities** (2): Shin-corrected futures-based win probabilities
+
+### Calibration Pipeline
+
+```
+Raw predictions → Spline/Isotonic calibration → Weighted ensemble → Temperature scaling → Clip [0.05, 0.95]
+```
+
+## Results (Unified 2023–2025 Leaderboard)
+
+| Metric | Score |
+|--------|-------|
+| Log Loss ↓ | **0.5400** |
+| AUC ↑ | **0.8062** |
+| Accuracy ↑ | **0.7573** |
+| Precision ↑ | **0.7647** |
+| Recall ↑ | **0.7500** |
+| F1 ↑ | **0.7573** |
+| Brier ↓ | 0.1795 |
+
+## Repository Structure
+
+```
+├── march_madness_2026_final.ipynb   # Main notebook (run this)
+├── march_madness_2026_final.py      # Same pipeline as .py script
+├── build_notebook.py                # Generates the .ipynb programmatically
+├── futures_2026.csv                 # Championship futures odds (111 teams)
+├── barttorvik_2026.csv              # Barttorvik team ratings for 2026
+├── fivethirtyeight_ncaa.csv         # FiveThirtyEight historical ratings
+├── NCAA_Tourney_2002_2025.csv       # Historical tournament results
+├── submission_2026.csv              # Final submission file
+├── diagnostics_2026.png             # Model diagnostic plots
+├── march-machine-learning-mania-2026/  # Kaggle competition data (men's only)
+│   ├── MRegularSeasonDetailedResults.csv
+│   ├── MRegularSeasonCompactResults.csv
+│   ├── MNCAATourneyCompactResults.csv
+│   ├── MNCAATourneyDetailedResults.csv
+│   ├── MNCAATourneySeeds.csv
+│   ├── MMasseyOrdinals.csv
+│   ├── MTeams.csv
+│   ├── MTeamConferences.csv
+│   ├── MTeamSpellings.csv
+│   └── SampleSubmissionStage2.csv
+├── requirements.txt
+└── README.md
+```
+
+## Quick Start
+
+```bash
+# Clone the repo
+git clone https://github.com/frtsoysal/march_madness_2026.git
+cd march_madness_2026
+
+# Install dependencies
+pip install -r requirements.txt
+
+# Download MMasseyOrdinals.csv (too large for GitHub, ~122MB)
+# Get it from: https://www.kaggle.com/competitions/march-machine-learning-mania-2026/data
+# Place it in: march-machine-learning-mania-2026/MMasseyOrdinals.csv
+
+# Run the notebook
+jupyter notebook march_madness_2026_final.ipynb
+```
+
+Or run the Python script directly:
+
+```bash
+python march_madness_2026_final.py
+```
+
+The pipeline runs in ~3-5 minutes and outputs `submission_2026.csv`.
+
+## Data Sources
+
+| Source | Description |
+|--------|-------------|
+| [Kaggle MMLM 2026](https://www.kaggle.com/competitions/march-machine-learning-mania-2026) | Historical results, seeds, rankings (35 CSVs) |
+| [Barttorvik](http://barttorvik.com) | Adjusted efficiency metrics (KenPom-equivalent) |
+| [VegasInsider](https://www.vegasinsider.com) | Championship futures odds (111 teams) |
+
+## References
+
+- **Raddar/vilnius-ncaa** — 2nd place Kaggle 2025 (XGBoost + Elo + GLM + spline)
+- **goto_conversion** — 1st place Kaggle 2024 (Shin conversion + Log5 market blend)
+- **Mike Kim** — 4th place Kaggle 2025 (logistic regression baseline)
+
+## Team
+
+Fordham University — March Madness 2026 Competition
