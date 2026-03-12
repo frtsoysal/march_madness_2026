@@ -49,7 +49,6 @@ Raw predictions → Spline/Isotonic calibration → Weighted ensemble → Temper
 ```
 ├── march_madness_2026_final.ipynb   # Main notebook (run this)
 ├── march_madness_2026_final.py      # Same pipeline as .py script
-├── build_notebook.py                # Generates the .ipynb programmatically
 ├── futures_2026.csv                 # Championship futures odds (111 teams)
 ├── barttorvik_2026.csv              # Barttorvik team ratings for 2026
 ├── fivethirtyeight_ncaa.csv         # FiveThirtyEight historical ratings
