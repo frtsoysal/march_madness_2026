@@ -17,7 +17,7 @@ venv/
 *.swo
 .cursor/
 
-# Claude
+# Config
 .claude/
 
 # OS
