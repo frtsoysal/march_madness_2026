@@ -112,6 +112,4 @@ The pipeline runs in ~3-5 minutes and outputs `submission_2026.csv`.
 - **goto_conversion** — 1st place Kaggle 2024 (Shin conversion + Log5 market blend)
 - **Mike Kim** — 4th place Kaggle 2025 (logistic regression baseline)
 
-## Team
 
-Fordham University — March Madness 2026 Competition
