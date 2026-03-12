@@ -1,6 +1,6 @@
 # March Madness 2026 — NCAA Tournament Prediction
 
-Log-loss optimized prediction pipeline for the Fordham University NCAA March Madness 2026 competition.
+Log-loss optimized prediction pipeline 
 
 ## Approach
 
